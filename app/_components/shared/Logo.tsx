@@ -15,7 +15,7 @@ export function Logo() {
         />
       </div>
       <span className="text-snow font-bold uppercase text-xl sm:text-2xl md:text-3xl whitespace-nowrap">
-        Next Pay
+        Nex Pay
       </span>
     </Link>
   );

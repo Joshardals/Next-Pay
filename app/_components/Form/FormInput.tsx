@@ -2,9 +2,10 @@ import { ButtonHTMLAttributes, InputHTMLAttributes, useState } from "react";
 
 // FormInput Component
 interface FormInputProps extends InputHTMLAttributes<HTMLInputElement> {
-  label: string;
+  label?: string;
   type: string;
   placeholder: string;
+  isLoading?: boolean;
 }
 
 // Button Component
@@ -27,7 +28,7 @@ export const Button: React.FC<ButtonProps> = ({
   const widthStyles = fullWidth ? "w-full" : "";
   const variantStyles = {
     primary:
-      "bg-[#C6A14E] text-black hover:bg-[#B89346] disabled:bg-[#C6A14E]/50",
+      "bg-[#C6A14E] text-black hover:bg-[#C6A14E] disabled:bg-[#C6A14E]/50",
     secondary:
       "bg-[#1D1D1D] text-white hover:bg-[#2D2D2D] disabled:bg-[#1D1D1D]/50",
   };
@@ -52,6 +53,8 @@ export const FormInput: React.FC<FormInputProps> = ({
   label,
   type: initialType,
   placeholder,
+  isLoading = false,
+  disabled,
   ...props
 }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -65,16 +68,18 @@ export const FormInput: React.FC<FormInputProps> = ({
         <input
           type={type}
           placeholder={placeholder}
-          className={`w-full px-4 py-3 bg-[#1D1D1D] border border-darkGray/60 rounded font-light placeholder:font-light placeholder:tracking-wider placeholder:text-[#9B9B9B]/70 focus:border-[#C6A14E] focus:outline-none ${
+          className={`w-full px-4 py-3 bg-[#1D1D1D] border border-darkGray/60 rounded font-light placeholder:font-light placeholder:tracking-wider placeholder:text-[#9B9B9B]/70 focus:border-[#C6A14E] focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed ${
             isPassword ? "pr-28" : ""
           }`}
+          disabled={isLoading || disabled}
           {...props}
         />
         {isPassword && (
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-[#C6A14E] text-sm bg-[#1D1D1D] px-2 py-1 z-10"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-[#C6A14E] text-sm bg-[#1D1D1D] px-2 py-1 z-10 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={isLoading || disabled}
           >
             {showPassword ? "Hide Password" : "Show Password"}
           </button>

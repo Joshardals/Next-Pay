@@ -12,7 +12,7 @@ const FEATURES = [
   },
   {
     path: "nav_percent",
-    label: "3.8% Bitcoin Interest on cash",
+    label: "3.8% Interest on cash",
   },
 ];
 
