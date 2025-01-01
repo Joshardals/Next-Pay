@@ -9,8 +9,16 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        snow: "#F9F9F9",
+        goldenrod: "#E5C07B",
+        charcoal: "#131313",
+        lightGray: "#9A9A9A",
+        darkGray: "#4C4C4C",
+        darkCharcoal: "#262626",
+      },
+
+      fontFamily: {
+        inter: ["var(--font-inter)"],
       },
     },
   },
