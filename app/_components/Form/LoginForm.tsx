@@ -51,7 +51,7 @@ export function LoginForm() {
       </Button>
 
       <div className="text-center font-light">
-        Don't have an account?{" "}
+        Don&apos;t have an account?{" "}
         <Link href="/signup" className="text-goldenrod">
           Sign up here
         </Link>
