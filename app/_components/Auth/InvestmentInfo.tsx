@@ -13,7 +13,7 @@ export function InvestmentInfo() {
 
           <div className="space-y-4 text-[#9B9B9B]">
             <p>
-              You'll be participating in stocks exchange investment
+              You&apos;ll be participating in stocks exchange investment
               opportunities.
             </p>
 
@@ -29,7 +29,7 @@ export function InvestmentInfo() {
             </div>
 
             <p>
-              To complete your account setup and verification, you'll need to
+              To complete your account setup and verification, you&apos;ll need to
               link a credit union or bank account for receiving funds.
             </p>
           </div>

@@ -4,13 +4,6 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 
-interface VerificationStatus {
-  started: boolean;
-  completed: boolean;
-  startTime: number;
-  estimatedDays: number;
-}
-
 export function VerificationPending() {
   const { userData, logout } = useAuth();
   const router = useRouter();
@@ -129,7 +122,7 @@ export function VerificationPending() {
 
           <div className="space-y-4">
             <p className="text-[#B3B3B3]">
-              We're currently processing your bank account verification.{" "}
+              We&apos;re currently processing your bank account verification.{" "}
               {timeRemaining}
             </p>
 
@@ -168,7 +161,7 @@ export function VerificationPending() {
             <div className="mt-8 p-4 bg-[#2D2D2D] rounded-lg">
               <h3 className="font-medium mb-2">What happens next?</h3>
               <ul className="list-disc list-inside space-y-2 text-sm text-[#B3B3B3]">
-                <li>You'll receive an email once verification is complete</li>
+                <li>You&apos;ll receive an email once verification is complete</li>
                 <li>Your dashboard will be automatically updated</li>
                 <li>You can then start using all account features</li>
               </ul>
