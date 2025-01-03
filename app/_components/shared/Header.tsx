@@ -10,7 +10,7 @@ import { IoMdClose } from "react-icons/io";
 export function Header() {
   const [isMenuPOpen, setIsMenuOpen] = useState(false);
   return (
-    <header className="fixed top-0  max-w-7xl mx-auto  left-0 right-0 backdrop-blur-md bg-charcoal/90 px-4 sm:px-8 lg:px-20 py-6 lg:py-8 flex items-center justify-between z-50">
+    <header className="fixed top-0  max-w-7xl mx-auto  left-0 right-0 backdrop-blur-md bg-charcoal/90 px-4 sm:px-8 lg:px-20 py-6  flex items-center justify-between z-50">
       <Logo />
 
       {/* Mobile Menu Button */}

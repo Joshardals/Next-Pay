@@ -6,6 +6,9 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { auth, db } from "@/lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
+import { sendVerificationCode } from "@/lib/actions/verification";
+import { getAuthErrorMessage } from "@/lib/utils/auth-errors";
+import { ErrorMessage } from "./ErrorMessage";
 
 export function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -28,42 +31,33 @@ export function LoginForm() {
         password
       );
 
-      if (!userCredential.user.emailVerified) {
-        setError("Please verify your email before logging in");
-        return;
-      }
-
-      // Check if user has completed identity verification
+      // Check email verification status from Firestore
       const userDoc = await getDoc(doc(db, "users", userCredential.user.uid));
       const userData = userDoc.data();
 
+      // If email not verified, send to verification
+      if (!userData?.emailVerified) {
+        await sendVerificationCode(userCredential.user.uid, email);
+        router.push("/verify-email");
+        return;
+      }
+
+      // If verification info not submitted, send to verification form
       if (!userData?.verificationInfo) {
-        // User hasn't submitted verification
         router.push("/verification");
         return;
       }
 
-      if (userData?.verificationStatus === "pending") {
-        // User has submitted verification but it's still pending
-        router.push("/dashboard/verification-pending");
+      // Check if user has completed overdraft/investment selection
+      if (!userData.overdraftType && !userData.investmentAmount) {
+        router.push("/verification/overdraft");
         return;
       }
 
-      if (userData?.verificationStatus === "rejected") {
-        setError(
-          "Your identity verification was rejected. Please contact support."
-        );
-        return;
-      }
-
-      // If verification is approved or no verification needed
+      // All steps completed, proceed to dashboard
       router.push("/dashboard");
     } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message);
-      } else {
-        setError("An unexpected error occurred");
-      }
+      setError(getAuthErrorMessage(error));
     } finally {
       setIsLoading(false);
     }
@@ -71,11 +65,7 @@ export function LoginForm() {
 
   return (
     <form className="" onSubmit={handleSubmit}>
-      {error && (
-        <div className="p-3 mb-4 text-sm text-red-500 bg-red-100 rounded-md">
-          {error}
-        </div>
-      )}
+      {error && <ErrorMessage error={error} />}
 
       <div className="space-y-6 mb-3">
         <FormInput

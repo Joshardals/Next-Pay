@@ -2,15 +2,16 @@
 import { useState } from "react";
 import { Button, FormInput } from "./FormInput";
 import Link from "next/link";
-
 import {
   createUserWithEmailAndPassword,
-  sendEmailVerification,
   updateProfile,
 } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { auth, db } from "@/lib/firebase";
+import { sendVerificationCode } from "@/lib/actions/verification";
+import { getAuthErrorMessage } from "@/lib/utils/auth-errors";
+import { ErrorMessage } from "./ErrorMessage";
 
 export function SignupForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -29,7 +30,6 @@ export function SignupForm() {
     const lastName = formData.get("lastName") as string;
 
     try {
-      // Create user in Firebase Auth
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
@@ -38,12 +38,10 @@ export function SignupForm() {
 
       const user = userCredential.user;
 
-      // Update profile with name
       await updateProfile(user, {
         displayName: `${firstName} ${lastName}`,
       });
 
-      // Store additional user data in Firestore
       await setDoc(doc(db, "users", user.uid), {
         firstName,
         lastName,
@@ -52,16 +50,13 @@ export function SignupForm() {
         emailVerified: false,
       });
 
-      // Send verification email
-      await sendEmailVerification(user);
-
+      await sendVerificationCode(user.uid, email);
       router.push("/verify-email");
     } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message);
-      } else {
-        setError("An unexpected error occurred");
-      }
+      setError(getAuthErrorMessage(error));
+
+      // Log the error for debugging (remove in production)
+      console.error("Signup error:", error);
     } finally {
       setIsLoading(false);
     }
@@ -69,12 +64,9 @@ export function SignupForm() {
 
   return (
     <form className="space-y-6" onSubmit={handleSubmit}>
-      {error && (
-        <div className="p-3 text-sm text-red-500 bg-red-100 rounded-md">
-          {error}
-        </div>
-      )}
+      {error && <ErrorMessage error={error} />}
 
+      {/* Rest of the form remains the same */}
       <div className="grid max-md:grid-cols-1 grid-cols-2 gap-4">
         <FormInput
           name="firstName"
@@ -126,11 +118,17 @@ export function SignupForm() {
         />
         <label htmlFor="terms" className="text-sm text-[#9B9B9B]">
           I agree to Nex Pay&apos;s{" "}
-          <Link href="#" className="underline text-[#E4E4E4]">
+          <Link
+            href="#"
+            className="underline text-[#E4E4E4] hover:text-goldenrod transition-colors"
+          >
             Terms of Service
           </Link>{" "}
           and{" "}
-          <Link href="#" className="underline text-[#E4E4E4]">
+          <Link
+            href="#"
+            className="underline text-[#E4E4E4] hover:text-goldenrod transition-colors"
+          >
             Privacy Policy
           </Link>
         </label>
@@ -149,7 +147,7 @@ export function SignupForm() {
         Already have a Nex Pay account?{" "}
         <Link
           href="/login"
-          className={`text-goldenrod ${
+          className={`text-goldenrod hover:text-goldenrod/80 transition-colors ${
             isLoading ? "pointer-events-none opacity-50" : ""
           }`}
         >

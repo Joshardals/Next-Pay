@@ -1,10 +1,11 @@
 "use client";
-import { useState } from "react";
-import { doc, updateDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { useState, useEffect } from "react";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { db, auth } from "@/lib/firebase";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import { FormInput, Button } from "../Form/FormInput";
+import { toast } from "react-hot-toast";
 
 interface VerificationInfo {
   fullName: string;
@@ -19,6 +20,72 @@ export function UserVerification() {
   const [error, setError] = useState("");
   const { user } = useAuth();
   const router = useRouter();
+
+  useEffect(() => {
+    const checkVerificationStatus = async () => {
+      try {
+        if (!user) {
+          router.push("/login");
+          return;
+        }
+
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+        const userData = userDoc.data();
+
+        if (!userData) {
+          router.push("/login");
+          return;
+        }
+
+        // Check if email is verified
+        if (!userData.emailVerified) {
+          router.push("/verify-email");
+          return;
+        }
+
+        // Check if all steps are completed
+        if (
+          userData.verificationInfo &&
+          (userData.overdraftType ||
+            userData.overdraftLimit ||
+            userData.investmentAmount)
+        ) {
+          router.push("/dashboard");
+          return;
+        }
+
+        // If verification info exists, check the flow status
+        if (userData.verificationInfo) {
+          // If verification is approved or rejected, handle accordingly
+          if (userData.verificationStatus === "approved") {
+            router.push("/dashboard");
+            return;
+          } else if (userData.verificationStatus === "rejected") {
+            toast.error(
+              "Your verification was rejected. Please contact support."
+            );
+            router.push("/dashboard");
+            return;
+          }
+
+          // If they haven't completed overdraft selection, send them there
+          if (
+            !userData.overdraftType &&
+            !userData.overdraftLimit &&
+            !userData.investmentAmount
+          ) {
+            router.push("/verification/overdraft");
+            return;
+          }
+        }
+      } catch (error) {
+        console.error("Error checking verification status:", error);
+        toast.error("Something went wrong. Please try again.");
+      }
+    };
+
+    checkVerificationStatus();
+  }, [user, router]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -37,18 +104,33 @@ export function UserVerification() {
     try {
       if (!user) throw new Error("No user found");
 
+      // Double check status before submitting
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+      const userData = userDoc.data();
+
+      if (!userData?.emailVerified) {
+        throw new Error("Please verify your email first");
+      }
+
+      if (userData?.verificationInfo) {
+        throw new Error("Verification already submitted");
+      }
+
       await updateDoc(doc(db, "users", user.uid), {
         verificationInfo,
         verificationStatus: "pending",
         verificationSubmittedAt: new Date().toISOString(),
       });
 
+      toast.success("Verification submitted successfully!");
       router.push("/verification/overdraft");
     } catch (error) {
       if (error instanceof Error) {
         setError(error.message);
+        toast.error(error.message);
       } else {
         setError("An unexpected error occurred");
+        toast.error("An unexpected error occurred");
       }
     } finally {
       setIsLoading(false);
