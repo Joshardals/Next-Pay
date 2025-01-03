@@ -2,6 +2,7 @@
 import { db } from "@/lib/firebase";
 import { doc, updateDoc } from "firebase/firestore";
 import nodemailer from "nodemailer";
+import path from "path";
 
 export async function sendVerificationCode(userId: string, email: string) {
   const code = Math.floor(100000 + Math.random() * 900000).toString();
@@ -22,6 +23,8 @@ export async function sendVerificationCode(userId: string, email: string) {
     },
   });
 
+  const logoPath = path.join(process.cwd(), "public", "logo.png");
+
   await transporter.sendMail({
     from: '"Nex Pay" <noreply@nexpay.com>',
     to: email,
@@ -33,7 +36,7 @@ export async function sendVerificationCode(userId: string, email: string) {
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
           <title>Verification Code</title>
-         <style>
+          <style>
             body {
               font-family: Arial, sans-serif;
               line-height: 1.6;
@@ -114,9 +117,7 @@ export async function sendVerificationCode(userId: string, email: string) {
         <body>
           <div class="container">
             <div class="header">
-              <img src="${
-                process.env.LOGO_URL
-              }" alt="Nex Pay Logo" class="logo">
+              <img src="cid:logo" alt="Nex Pay Logo" class="logo">
               <span class="company-name">Nex Pay</span>
             </div>
             <div class="content">
@@ -132,6 +133,14 @@ export async function sendVerificationCode(userId: string, email: string) {
         </body>
       </html>
     `,
+    attachments: [
+      {
+        filename: "logo.png",
+        path: logoPath,
+        cid: "logo",
+      },
+    ],
   });
+
   return true;
 }

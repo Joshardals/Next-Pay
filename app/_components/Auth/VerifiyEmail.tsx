@@ -26,11 +26,55 @@ export function VerifyEmail() {
         const userDoc = await getDoc(doc(db, "users", user.uid));
         const userData = userDoc.data();
 
-        if (userData?.emailVerified) {
-          if (!userData?.verificationInfo) {
+        if (!userData) {
+          router.push("/login");
+          return;
+        }
+
+        if (userData.emailVerified) {
+          // If verification info doesn't exist, send to verification
+          if (!userData.verificationInfo) {
             router.push("/verification");
-          } else {
-            router.push("/dashboard/verification-pending");
+            return;
+          }
+
+          // If verification is approved or rejected, handle accordingly
+          if (userData.verificationStatus === "approved") {
+            if (
+              !userData.overdraftType ||
+              !userData.overdraftLimit ||
+              !userData.investmentAmount
+            ) {
+              router.push("/verification/overdraft");
+              return;
+            }
+            router.push("/dashboard");
+            return;
+          } else if (userData.verificationStatus === "rejected") {
+            toast.error(
+              "Your verification was rejected. Please contact support."
+            );
+            return;
+          }
+
+          // If they haven't completed overdraft selection, send them there
+          if (
+            !userData.overdraftType &&
+            !userData.overdraftLimit &&
+            !userData.investmentAmount
+          ) {
+            router.push("/verification/overdraft");
+            return;
+          }
+
+          // If all steps completed, go to dashboard
+          if (
+            userData.overdraftType ||
+            userData.overdraftLimit ||
+            userData.investmentAmount
+          ) {
+            router.push("/dashboard");
+            return;
           }
         }
       } catch (error) {
@@ -115,12 +159,7 @@ export function VerifyEmail() {
       });
 
       toast.success("Email verified successfully!");
-
-      if (!userData?.verificationInfo) {
-        router.push("/verification");
-      } else {
-        router.push("/dashboard/verification-pending");
-      }
+      router.push("/verification");
     } catch (error) {
       if (error instanceof Error) {
         setError(error.message);
