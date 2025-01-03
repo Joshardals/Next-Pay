@@ -1,17 +1,12 @@
 "use server";
-// utils/verification.ts
 import { db } from "@/lib/firebase";
 import { doc, updateDoc } from "firebase/firestore";
 import nodemailer from "nodemailer";
 
 export async function sendVerificationCode(userId: string, email: string) {
-  // Generate a 6-digit code
   const code = Math.floor(100000 + Math.random() * 900000).toString();
-
-  // Set expiration to 10 minutes from now
   const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
 
-  // Update Firestore
   await updateDoc(doc(db, "users", userId), {
     verificationCode: {
       code,
@@ -19,7 +14,6 @@ export async function sendVerificationCode(userId: string, email: string) {
     },
   });
 
-  // Send email
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -39,7 +33,7 @@ export async function sendVerificationCode(userId: string, email: string) {
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
           <title>Verification Code</title>
-          <style>
+         <style>
             body {
               font-family: Arial, sans-serif;
               line-height: 1.6;
@@ -120,7 +114,9 @@ export async function sendVerificationCode(userId: string, email: string) {
         <body>
           <div class="container">
             <div class="header">
-              <img src="cid:logo" alt="Nex Pay Logo" class="logo">
+              <img src="${
+                process.env.LOGO_URL
+              }" alt="Nex Pay Logo" class="logo">
               <span class="company-name">Nex Pay</span>
             </div>
             <div class="content">
@@ -136,11 +132,6 @@ export async function sendVerificationCode(userId: string, email: string) {
         </body>
       </html>
     `,
-    attachments: [{
-      filename: 'logo.png',
-      path: './public/logo.png', // Adjust this path to where your logo is stored
-      cid: 'logo'
-    }]
   });
   return true;
 }
