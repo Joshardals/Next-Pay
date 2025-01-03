@@ -2,7 +2,6 @@
 import { db } from "@/lib/firebase";
 import { doc, updateDoc } from "firebase/firestore";
 import nodemailer from "nodemailer";
-import path from "path";
 
 export async function sendVerificationCode(userId: string, email: string) {
   const code = Math.floor(100000 + Math.random() * 900000).toString();
@@ -23,7 +22,7 @@ export async function sendVerificationCode(userId: string, email: string) {
     },
   });
 
-  const logoPath = path.join(process.cwd(), "public", "logo.png");
+  const LOGO_URL = "https://i.ibb.co/BLg3nsp/logo.png";
 
   await transporter.sendMail({
     from: '"Nex Pay" <noreply@nexpay.com>',
@@ -117,7 +116,7 @@ export async function sendVerificationCode(userId: string, email: string) {
         <body>
           <div class="container">
             <div class="header">
-              <img src="cid:logo" alt="Nex Pay Logo" class="logo">
+              <img src="${LOGO_URL}" alt="Nex Pay Logo" class="logo">
               <span class="company-name">Nex Pay</span>
             </div>
             <div class="content">
@@ -133,13 +132,6 @@ export async function sendVerificationCode(userId: string, email: string) {
         </body>
       </html>
     `,
-    attachments: [
-      {
-        filename: "logo.png",
-        path: logoPath,
-        cid: "logo",
-      },
-    ],
   });
 
   return true;
