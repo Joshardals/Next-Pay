@@ -97,7 +97,7 @@ export function OverdraftSelection() {
         <div className="w-full bg-[#1D1D1D] p-8 rounded-lg shadow-lg">
           <h1 className="text-2xl font-bold mb-6">Investment Options</h1>
           <p className="text-[#9B9B9B] mb-8">
-            Choose how you'd like to grow your wealth with us.
+            Choose how you&apos;d like to grow your wealth with us.
           </p>
 
           {!selectedOption ? (

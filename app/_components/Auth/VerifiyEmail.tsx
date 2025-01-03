@@ -172,7 +172,7 @@ export function VerifyEmail() {
           Verify your email
         </h1>
         <p className="mb-6 text-center text-gray-300">
-          We've sent a verification code to{" "}
+          We&apos;ve sent a verification code to{" "}
           <span className="font-medium">{auth.currentUser?.email}</span>
         </p>
 
