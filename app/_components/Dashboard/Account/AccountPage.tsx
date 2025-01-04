@@ -73,7 +73,7 @@ export function AccountPage() {
       {/* Main Content Grid */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
         {/* Stock Holdings Section */}
-        <div className="xl:col-span-2 bg-darkCharcoal rounded-xl p-6">
+        <div className="xl:col-span-2 bg-darkCharcoal rounded-xl p-4 md:p-6">
           <h2 className="text-xl font-medium text-snow mb-4">Stock Holdings</h2>
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -119,7 +119,7 @@ export function AccountPage() {
         {/* Quick Actions Section */}
         <div className="space-y-4">
           {/* Account Management Cards */}
-          <div className="bg-darkCharcoal rounded-xl p-6">
+          <div className="bg-darkCharcoal rounded-xl p-4 md:p-6">
             <h2 className="text-xl font-medium text-snow mb-4">
               Quick Actions
             </h2>
@@ -153,7 +153,7 @@ export function AccountPage() {
           </div>
 
           {/* Verification Level Card */}
-          <div className="bg-darkCharcoal rounded-xl p-6">
+          <div className="bg-darkCharcoal rounded-xl p-4 md:p-6">
             <h2 className="text-xl font-medium text-snow mb-4">
               Verification Level
             </h2>
