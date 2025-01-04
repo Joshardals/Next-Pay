@@ -283,7 +283,7 @@ export function StockChart() {
   const timeFrames: TimeFrame[] = ["24H", "1W", "1M", "1Y", "ALL"];
 
   return (
-    <div className="bg-charcoal rounded-2xl p-6 max-md:p-4">
+    <div className="bg-charcoal rounded-2xl">
       <div className="flex flex-col max-md:gap-4 md:flex-row md:justify-between items-start mb-6">
         <div>
           <div className="flex items-center gap-3">

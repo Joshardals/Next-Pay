@@ -20,7 +20,7 @@ export function ActionCard({
   variant = "primary",
 }: ActionCardProps) {
   return (
-    <div className="bg-darkCharcoal rounded-2xl p-6 hover:shadow-lg transition-all duration-300">
+    <div className="bg-darkCharcoal rounded-2xl p-4 hover:shadow-lg transition-all duration-300">
       <div className="flex justify-between items-start mb-4">
         <h3 className="text-snow font-medium">{title}</h3>
         <span className="text-xs text-lightGray bg-charcoal sm:bg-darkCharcoal px-2 py-1 rounded-lg">
