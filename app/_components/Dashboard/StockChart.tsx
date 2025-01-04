@@ -283,8 +283,8 @@ export function StockChart() {
   const timeFrames: TimeFrame[] = ["24H", "1W", "1M", "1Y", "ALL"];
 
   return (
-    <div className="bg-charcoal rounded-2xl p-6">
-      <div className="flex justify-between items-start mb-6">
+    <div className="bg-charcoal rounded-2xl p-6 max-md:p-4">
+      <div className="flex flex-col max-md:gap-4 md:flex-row md:justify-between items-start mb-6">
         <div>
           <div className="flex items-center gap-3">
             <h3 className="text-snow font-medium">TSLA</h3>
@@ -300,19 +300,19 @@ export function StockChart() {
             </span>
           </div>
           <div className="flex items-center gap-2 mt-1">
-            <p className="text-2xl font-semibold text-snow">
+            <p className="text-2xl max-md:text-xl font-semibold text-snow">
               ${currentPrice.toFixed(2)}
             </p>
             <span className="text-xs text-lightGray">TSLA/USD</span>
           </div>
         </div>
 
-        <div className="flex gap-1 bg-darkCharcoal rounded-xl p-1">
+        <div className="flex max-md:w-full overflow-x-auto gap-1 bg-darkCharcoal rounded-xl p-1">
           {timeFrames.map((timeFrame) => (
             <button
               key={timeFrame}
               onClick={() => handleTimeFrameChange(timeFrame)}
-              className={`px-4 py-2 text-sm rounded-lg transition-all duration-200 
+              className={`px-4 py-2 text-sm max-md:text-xs rounded-lg transition-all duration-200 whitespace-nowrap
                 ${
                   selectedTimeFrame === timeFrame
                     ? "bg-charcoal text-snow"
@@ -325,7 +325,7 @@ export function StockChart() {
         </div>
       </div>
 
-      <div className="h-[400px] w-full bg-darkCharcoal rounded-xl overflow-hidden relative">
+      <div className="h-[400px] max-md:h-[300px] w-full bg-darkCharcoal rounded-xl overflow-hidden relative">
         {isLoading && (
           <div className="absolute inset-0 bg-darkCharcoal/50 flex items-center justify-center z-10">
             <div className="text-snow">Updating...</div>
@@ -339,7 +339,7 @@ export function StockChart() {
         </div>
 
         <svg
-          className="w-full h-full p-4"
+          className="w-full h-full p-4 max-md:p-2"
           viewBox="0 0 100 100"
           preserveAspectRatio="none"
         >
@@ -369,9 +369,9 @@ export function StockChart() {
           />
         </svg>
 
-        <div className="absolute bottom-0 left-0 right-0 flex justify-between px-4 py-2 text-xs text-lightGray">
+        <div className="absolute bottom-0 left-0 right-0 flex justify-between px-4 py-2 text-xs max-md:text-[10px] text-lightGray">
           {chartData
-            .filter((_, i) => i % 6 === 0)
+            .filter((_, i) => i % (window.innerWidth <= 768 ? 12 : 6) === 0)
             .map((point, i) => (
               <span key={i}>
                 {format(
