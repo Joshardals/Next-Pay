@@ -29,7 +29,7 @@ export function Performance() {
   };
 
   return (
-    <div className="px-2 md:px-4 py-6 md:py-12 xl:p-6 max-w-[1920px] mx-auto">
+    <div className="px-2 md:px-4 max-md:py-12 xl:p-6 max-w-[1920px] mx-auto">
       {/* Header Section */}
       <div className="mb-6 md:mb-8">
         <h1 className="text-xl md:text-2xl font-medium text-snow mb-2">
