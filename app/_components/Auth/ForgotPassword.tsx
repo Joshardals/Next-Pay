@@ -1,4 +1,3 @@
-// app/_components/Auth/ForgotPassword.tsx
 "use client";
 import { useState } from "react";
 import { Button, FormInput } from "../Form/FormInput";
@@ -26,6 +25,7 @@ export function ForgotPassword() {
       toast.success("Password reset instructions sent to your email");
     } catch (error) {
       setError("Failed to send reset instructions. Please try again.");
+      console.log(error);
     } finally {
       setIsLoading(false);
     }
@@ -39,7 +39,7 @@ export function ForgotPassword() {
             Reset Password
           </h2>
           <p className="text-center text-gray-300 mb-6">
-            Enter your email address and we'll send you password reset
+            Enter your email address and we&apos;ll send you password reset
             instructions.
           </p>
           <form onSubmit={handleSubmit}>
@@ -76,7 +76,7 @@ export function ForgotPassword() {
         <div className="text-center">
           <h2 className="text-2xl font-bold mb-4">Check Your Email</h2>
           <p className="text-gray-300 mb-6">
-            We've sent password reset instructions to your email. Please check
+            We&apos;ve sent password reset instructions to your email. Please check
             your inbox and follow the instructions.
           </p>
           <Button

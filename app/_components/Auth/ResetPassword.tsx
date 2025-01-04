@@ -28,6 +28,7 @@ export default function ResetPassword() {
         setIsValidCode(true);
       } catch (error) {
         setError("Invalid or expired reset link");
+        console.log(error);
       }
     };
 
@@ -57,6 +58,7 @@ export default function ResetPassword() {
       router.push("/login");
     } catch (error) {
       setError("Failed to reset password. Please try again.");
+      console.log(error);
     } finally {
       setIsLoading(false);
     }

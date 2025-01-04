@@ -1,6 +1,6 @@
 // app/_actions/password-reset.ts
 "use server";
-import { auth, db } from "@/lib/firebase";
+import { auth } from "@/lib/firebase";
 import { sendPasswordResetEmail } from "firebase/auth";
 import nodemailer from "nodemailer";
 
