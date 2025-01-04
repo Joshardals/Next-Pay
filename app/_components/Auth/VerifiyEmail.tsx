@@ -249,7 +249,7 @@ export function VerifyEmail() {
           </Button>
         </form>
 
-        <div className="mt-6 text-center">
+        <div className="mt-6 text-center space-y-4">
           <button
             onClick={handleResendCode}
             className={`text-sm ${
@@ -263,6 +263,15 @@ export function VerifyEmail() {
               ? `Resend code in ${resendTimer}s`
               : "Resend verification code"}
           </button>
+
+          <div className="border-t border-[#3D3D3D] pt-4">
+            <button
+              onClick={() => router.push("/signup")}
+              className="text-sm text-gray-400 hover:text-goldenrod transition-colors"
+            >
+              Use a different email address
+            </button>
+          </div>
         </div>
       </div>
     </main>

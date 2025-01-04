@@ -90,10 +90,7 @@ export function LoginForm() {
       </div>
 
       <div className="flex items-center justify-between mb-6">
-        <Link
-          href="/forgot-password"
-          className="text-xs font-light text-goldenrod"
-        >
+        <Link href="#" className="text-xs font-light text-goldenrod">
           Forgot password?
         </Link>
       </div>

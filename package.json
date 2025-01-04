@@ -9,8 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "@types/nodemailer": "^6.4.17",
     "appwrite": "^16.1.0",
+    "bcryptjs": "^2.4.3",
+    "date-fns": "^4.1.0",
     "firebase": "^11.1.0",
     "next": "15.1.3",
     "node-mailer": "^0.1.1",
